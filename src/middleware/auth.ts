@@ -3,20 +3,19 @@ import express from "express";
 import { Users } from "../models/users";
 
 // auth middleware
-export const auth = async (
+const auth = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) => {
   try {
-    console.log(req.header);
-    // getting error here, so following code is commented
-    // const token: string = req.header("Authorization").replace("Bearer ", "");
-    // const decoded = jwt.verify(token, "secretKey");
-    // let user = await Users.findOne({ _id: decoded._id }).select({
-    //   password: 0,
-    // });
-    // req.user = user;
+    const tokenStr: any = req.headers.authorization;
+    const token: string = tokenStr.replace("Bearer ", "");
+    const decoded: any = jwt.verify(token, "secretKey");
+    const user: any = await Users.findOne({_id: decoded._id,}).select({ password: 0 });
+
+    req.user = user;
+    console.log(req.user);
     next();
   } catch (e) {
     res.status(401).send({ error: "please authenticate" });

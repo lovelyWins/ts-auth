@@ -42,8 +42,7 @@ const loginUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
 // for profile
 const getProfile = (req, res) => __awaiter(this, void 0, void 0, function* () {
     try {
-        res.send('getting user');
-        //res.send(req.user)       //will work once auth middleware get created
+        res.send(req.user);
     }
     catch (_a) {
         res.status(400).send({ message: "cannot get profile" });

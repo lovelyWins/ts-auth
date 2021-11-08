@@ -9,17 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const jwt = require("jsonwebtoken");
+const users_1 = require("../models/users");
 // auth middleware
-exports.auth = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+const auth = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
-        console.log(req.header);
-        // getting error here, so following code is commented
-        // const token: string = req.header("Authorization").replace("Bearer ", "");
-        // const decoded = jwt.verify(token, "secretKey");
-        // let user = await Users.findOne({ _id: decoded._id }).select({
-        //   password: 0,
-        // });
-        // req.user = user;
+        const tokenStr = req.headers.authorization;
+        const token = tokenStr.replace("Bearer ", "");
+        const decoded = jwt.verify(token, "secretKey");
+        const user = yield users_1.Users.findOne({ _id: decoded._id, }).select({ password: 0 });
+        req.user = user;
+        console.log(req.user);
         next();
     }
     catch (e) {
@@ -27,4 +26,4 @@ exports.auth = (req, res, next) => __awaiter(this, void 0, void 0, function* () 
     }
     next();
 });
-module.exports = exports.auth;
+module.exports = auth;

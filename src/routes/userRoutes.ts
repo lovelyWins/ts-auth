@@ -1,7 +1,7 @@
 import express from "express";
 require("../db/mongoose");
 const userController = require("../controller/userController");
-import { auth } from "../middleware/auth";
+const auth = require("../middleware/auth");
 
 // creating router
 const userRouter = express.Router();

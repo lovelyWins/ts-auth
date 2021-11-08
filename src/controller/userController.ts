@@ -36,8 +36,7 @@ const loginUser = async (req: express.Request, res: express.Response) => {
 const getProfile = async (req: express.Request, res: express.Response) => {
   try {
    
-    res.send('getting user')
-    //res.send(req.user)       //will work once auth middleware get created
+    res.send(req.user) 
   } catch {
     res.status(400).send({ message: "cannot get profile" });
   }
