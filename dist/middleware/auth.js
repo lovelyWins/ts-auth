@@ -13,12 +13,14 @@ const users_1 = require("../models/users");
 // auth middleware
 const auth = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
+        console.log("auth is running  ");
         const tokenStr = req.headers.authorization;
         const token = tokenStr.replace("Bearer ", "");
         const decoded = jwt.verify(token, "secretKey");
-        const user = yield users_1.Users.findOne({ _id: decoded._id, }).select({ password: 0 });
+        const user = yield users_1.Users.findOne({ _id: decoded._id }).select({
+            password: 0,
+        });
         req.user = user;
-        console.log(req.user);
         next();
     }
     catch (e) {

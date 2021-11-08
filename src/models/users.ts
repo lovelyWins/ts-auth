@@ -44,14 +44,9 @@ const userSchema = new mongoose.Schema<User>({
   },
 });
 
-
-
 // creating function to check for if email/password is correct
-export const findByCredentials = async (
-  email: string,
-  password: string
-) => {
-  // finding if email provided is 
+export const findByCredentials = async (email: string, password: string) => {
+  // finding if email provided is
   const user = await Users.findOne({ email });
   // if user doesn't exists
   if (!user) {

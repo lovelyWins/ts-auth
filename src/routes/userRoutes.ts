@@ -16,11 +16,6 @@ userRouter.post("/login", userController.loginUser);
 userRouter.get("/profile", auth, userController.getProfile);
 
 // update possword
-userRouter.post(
-  "/users/changePassword",
-  (req: express.Request, res: express.Response) => {
-    res.send("User updated");
-  }
-);
+userRouter.post("/users/changePassword", auth, userController.updatePassword);
 
 module.exports = userRouter;

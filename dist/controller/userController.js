@@ -48,8 +48,36 @@ const getProfile = (req, res) => __awaiter(this, void 0, void 0, function* () {
         res.status(400).send({ message: "cannot get profile" });
     }
 });
+// update password
+const updatePassword = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const userObj = req.user;
+        const user = yield users_1.Users.findById(userObj._id);
+        // matching if password is correct
+        const isCorrectPass = yield bcrypt.compare(req.body.currentPassword, user.password);
+        if (!isCorrectPass) {
+            throw new Error("Please enter valid Password");
+        }
+        // cheking if new password is equal to currrentPassword
+        if (req.body.newPassword === req.body.currentPassword) {
+            throw new Error("New password should not be same as current password");
+        }
+        // checking if new password and confirm password are equal
+        if (req.body.newPassword === req.body.confirmPassword) {
+            const encryptedPassword = yield bcrypt.hash(req.body.newPassword, 8);
+            yield users_1.Users.findByIdAndUpdate(userObj._id, {
+                password: encryptedPassword,
+            });
+            res.json({ message: "Password successfully changed" });
+        }
+    }
+    catch (e) {
+        res.status(400).send({ message: e.message });
+    }
+});
 module.exports = {
     registerUser,
     loginUser,
     getProfile,
+    updatePassword,
 };

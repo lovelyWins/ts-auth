@@ -16,7 +16,5 @@ userRouter.post("/login", userController.loginUser);
 // getting user
 userRouter.get("/profile", auth, userController.getProfile);
 // update possword
-userRouter.post("/users/changePassword", (req, res) => {
-    res.send("User updated");
-});
+userRouter.post("/users/changePassword", auth, userController.updatePassword);
 module.exports = userRouter;

@@ -50,7 +50,7 @@ const userSchema = new mongoose_1.default.Schema({
 });
 // creating function to check for if email/password is correct
 exports.findByCredentials = (email, password) => __awaiter(this, void 0, void 0, function* () {
-    // finding if email provided is 
+    // finding if email provided is
     const user = yield exports.Users.findOne({ email });
     // if user doesn't exists
     if (!user) {
