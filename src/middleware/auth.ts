@@ -13,15 +13,18 @@ const auth = async (
     const tokenStr: any = req.headers.authorization;
     const token: string = tokenStr.replace("Bearer ", "");
     const decoded: any = jwt.verify(token, "secretKey");
+    //lean the model 
     const user: any = await Users.findOne({ _id: decoded._id }).select({
       password: 0,
     });
+    //Verify if user found before storing it in db
+    
     req.user = user;
     next();
   } catch (e) {
     res.status(401).send({ error: "please authenticate" });
   }
-
+//Remove following next
   next();
 };
 
