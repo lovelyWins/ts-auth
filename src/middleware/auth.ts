@@ -17,8 +17,7 @@ const auth = async (
     const user: any = await Users.findOne({ _id: decoded._id }).select({
       password: 0,
     });
-    //Verify if user found before storing it in db
-    
+    //Verify if user found before storing it in request
     req.user = user;
     next();
   } catch (e) {
