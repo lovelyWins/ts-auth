@@ -7,38 +7,20 @@ import path from "path";
 // setting up router for routes related to blog-posts
 const postRouter = express.Router();
 
-// configuring multer
-// const upload = multer({
-//   dest: "public/uploads/blog-post",
-//   // limits: {
-//   //   fileSize: 1000000, //i.e. 1mb
-//   // },
-//   filename(req: any, file: any, cb: any) {
-//     cb(null, file.fieldName + '-' + Date.now() + path.extname(file.originalname))
-//   },
-//   // function that will validate for image extension .jpg and .png only.
-//   filefilter(req: any, file: any, cb: any) {
-//     if (!file.originalname.endsWith(".jpg") && !file.originalname.endsWith(".png")) {
-//       return cb(new Error("File must be in jpg or png format"));
-//     }
-//     cb(null, true);
-//   },
-
-// });
-
 let storage = multer.diskStorage({
   destination: "public/uploads/blog-post",
-  // filefilter(req: any, file: any, cb: any) {
-  //   if (!file.originalname.endsWith(".jpg") && !file.originalname.endsWith(".png")) {
-  //     return cb(new Error("File must be in jpg or png format"));
-  //   }
-  //   cb(null, true);
-  // },
   filename: function (req, file, cb) {
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
   }
 })
-const upload = multer({ storage: storage })
+const upload = multer({ storage: storage,
+   fileFilter: function (req: any, file: any, cb: any) {
+    if (!file.originalname.endsWith(".jpg") && !file.originalname.endsWith(".png")) {
+      return cb(new Error("File must be in jpg or png format"));
+    }
+    cb(null, true);
+  },
+})
 
 // create post
 postRouter.post(
