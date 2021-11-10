@@ -10,6 +10,7 @@ const app = express_1.default();
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.json());
 app.use(mainRouter);
+app.use(express_1.default.static('public'));
 // listening to port
 app.listen(3000, () => {
     console.log("app is running on 3000");

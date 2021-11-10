@@ -9,20 +9,20 @@ const auth = async (
   next: express.NextFunction
 ) => {
   try {
-    console.log("auth is running  ");
     const tokenStr: any = req.headers.authorization;
     const token: string = tokenStr.replace("Bearer ", "");
     const decoded: any = jwt.verify(token, "secretKey");
     const user: any = await Users.findOne({ _id: decoded._id }).select({
       password: 0,
     });
+    if (!user) {
+      throw new Error("Unauthenticated");
+    }
     req.user = user;
     next();
   } catch (e) {
-    res.status(401).send({ error: "please authenticate" });
+    res.status(401).send({ error: "Unauthenticated" });
   }
-
-  next();
 };
 
 module.exports = auth;

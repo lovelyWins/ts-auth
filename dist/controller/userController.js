@@ -15,16 +15,13 @@ const bcrypt = require("bcrypt");
 const registerUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
     try {
         // creating users in db
-        console.log("regUser is running");
         const user = yield new users_1.Users(req.body);
-        console.log(user);
         user.password = yield bcrypt.hash(user.password, 8);
-        console.log(user);
         user.save();
         res.send({ message: "user registered" });
     }
     catch (e) {
-        console.log(e); //right now, getting error, while sendi obj as response
+        res.status(400).send({ message: "error occured" });
     }
 });
 // for login
@@ -35,7 +32,6 @@ const loginUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
         res.send({ token: token });
     }
     catch (e) {
-        console.log(e);
         res.status(400).send({ message: "error occured" });
     }
 });
@@ -44,7 +40,7 @@ const getProfile = (req, res) => __awaiter(this, void 0, void 0, function* () {
     try {
         res.send(req.user);
     }
-    catch (_a) {
+    catch (e) {
         res.status(400).send({ message: "cannot get profile" });
     }
 });
@@ -69,6 +65,9 @@ const updatePassword = (req, res) => __awaiter(this, void 0, void 0, function* (
                 password: encryptedPassword,
             });
             res.json({ message: "Password successfully changed" });
+        }
+        else {
+            throw new Error("New password and confirm password did not matched");
         }
     }
     catch (e) {

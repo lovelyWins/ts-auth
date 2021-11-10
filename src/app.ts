@@ -5,6 +5,7 @@ const app: express.Application = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(mainRouter)
+app.use(express.static('public'))
 
 
 

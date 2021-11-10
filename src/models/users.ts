@@ -42,6 +42,7 @@ const userSchema = new mongoose.Schema<User>({
       }
     },
   },
+
 });
 
 // creating function to check for if email/password is correct
@@ -62,7 +63,5 @@ export const findByCredentials = async (email: string, password: string) => {
 
   return user;
 };
-
-// export const Users = mongoose.model("Users", userSchema);
 
 export const Users = mongoose.model<User>("Users", userSchema);

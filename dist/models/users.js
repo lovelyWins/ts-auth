@@ -63,5 +63,4 @@ exports.findByCredentials = (email, password) => __awaiter(this, void 0, void 0,
     }
     return user;
 });
-// export const Users = mongoose.model("Users", userSchema);
 exports.Users = mongoose_1.default.model("Users", userSchema);

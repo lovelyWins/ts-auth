@@ -7,16 +7,12 @@ const bcrypt = require("bcrypt");
 const registerUser = async (req: express.Request, res: express.Response) => {
   try {
     // creating users in db
-    console.log("regUser is running");
     const user = await new Users(req.body);
-    console.log(user);
     user.password = await bcrypt.hash(user.password, 8);
-    console.log(user);
-
     user.save();
     res.send({ message: "user registered" });
-  } catch (e) {
-    console.log(e); //right now, getting error, while sendi obj as response
+  } catch (e: any) {
+    res.status(400).send({ message: "error occured" });
   }
 };
 
@@ -26,8 +22,7 @@ const loginUser = async (req: express.Request, res: express.Response) => {
     const user = await findByCredentials(req.body.email, req.body.password);
     const token = jwt.sign({ _id: user._id.toString() }, "secretKey");
     res.send({ token: token });
-  } catch (e) {
-    console.log(e);
+  } catch (e: any) {
     res.status(400).send({ message: "error occured" });
   }
 };
@@ -36,7 +31,7 @@ const loginUser = async (req: express.Request, res: express.Response) => {
 const getProfile = async (req: express.Request, res: express.Response) => {
   try {
     res.send(req.user);
-  } catch {
+  } catch (e: any) {
     res.status(400).send({ message: "cannot get profile" });
   }
 };
@@ -46,7 +41,6 @@ const updatePassword = async (req: express.Request, res: express.Response) => {
   try {
     const userObj: any = req.user;
     const user: any = await Users.findById(userObj._id);
-
     // matching if password is correct
     const isCorrectPass: boolean = await bcrypt.compare(
       req.body.currentPassword,
@@ -69,6 +63,8 @@ const updatePassword = async (req: express.Request, res: express.Response) => {
         password: encryptedPassword,
       });
       res.json({ message: "Password successfully changed" });
+    } else {
+      throw new Error("New password and confirm password did not matched");
     }
   } catch (e: any) {
     res.status(400).send({ message: e.message });
