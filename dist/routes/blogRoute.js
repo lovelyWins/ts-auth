@@ -24,7 +24,8 @@ let storage = multer_1.default.diskStorage({
         cb(null, file.fieldname + '-' + Date.now() + path_1.default.extname(file.originalname));
     }
 });
-const upload = multer_1.default({ storage: storage,
+const upload = multer_1.default({
+    storage: storage,
     fileFilter: function (req, file, cb) {
         if (!file.originalname.endsWith(".jpg") && !file.originalname.endsWith(".png")) {
             return cb(new Error("File must be in jpg or png format"));
@@ -35,13 +36,9 @@ const upload = multer_1.default({ storage: storage,
 // create post
 postRouter.post("/createPost", auth, upload.single("upload"), blogController.createPost);
 // get all posts
-postRouter.get("/posts", (req, res) => __awaiter(this, void 0, void 0, function* () {
-    res.send("all posts");
-}));
+postRouter.get("/posts", blogController.getPosts);
 // get one post by id
-postRouter.get("/post", (req, res) => __awaiter(this, void 0, void 0, function* () {
-    res.send("one post");
-}));
+postRouter.get("/post", blogController.getOnePost);
 // update post by id
 postRouter.post("/updatePost", (req, res) => __awaiter(this, void 0, void 0, function* () {
     res.send("post updated");

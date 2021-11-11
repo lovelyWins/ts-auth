@@ -37,7 +37,27 @@ const createPost = (req, res) => __awaiter(this, void 0, void 0, function* () {
 });
 // creating controller function for get users
 const getPosts = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const posts = yield blogs_1.Posts.find({});
+        res.send(posts);
+    }
+    catch (e) {
+        res.status(400).send({ message: e.message });
+    }
+});
+// creating controller function for get one post by id
+const getOnePost = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const id = req.body.id;
+        const post = yield blogs_1.Posts.findById({ "_id": id });
+        res.send(post);
+    }
+    catch (e) {
+        res.status(400).send({ message: e.message });
+    }
 });
 module.exports = {
     createPost,
+    getPosts,
+    getOnePost
 };

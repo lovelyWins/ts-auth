@@ -13,8 +13,9 @@ let storage = multer.diskStorage({
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
   }
 })
-const upload = multer({ storage: storage,
-   fileFilter: function (req: any, file: any, cb: any) {
+const upload = multer({
+  storage: storage,
+  fileFilter: function (req: any, file: any, cb: any) {
     if (!file.originalname.endsWith(".jpg") && !file.originalname.endsWith(".png")) {
       return cb(new Error("File must be in jpg or png format"));
     }
@@ -28,15 +29,10 @@ postRouter.post(
 );
 
 // get all posts
-postRouter.get("/posts", async (req: express.Request, res: express.Response) => {
-  res.send("all posts");
-}
-);
+postRouter.get("/posts", blogController.getPosts);
 
 // get one post by id
-postRouter.get("/post", async (req: express.Request, res: express.Response) => {
-  res.send("one post");
-});
+postRouter.get("/post",blogController.getOnePost);
 
 // update post by id
 postRouter.post(
