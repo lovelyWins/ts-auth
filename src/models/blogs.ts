@@ -7,6 +7,7 @@ export interface Post {
   content: string;
   timeOfCreation: string;
   timeOfUpdation: string;
+  createdBy: string
 }
 
 const postSchema = new mongoose.Schema<Post>({
@@ -38,6 +39,10 @@ const postSchema = new mongoose.Schema<Post>({
   timeOfUpdation: {
     type: String,
   },
+  createdBy: {
+    type: String,
+    required: true
+  }
 });
 
 export const Posts = mongoose.model<Post>("Posts", postSchema);

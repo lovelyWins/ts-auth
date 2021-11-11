@@ -11,6 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const blogs_1 = require("../models/blogs");
 const auth = require("../middleware/auth");
 const path = require('path');
+const fs = require('fs');
 // create post controller function
 const createPost = (req, res) => __awaiter(this, void 0, void 0, function* () {
     try {
@@ -56,8 +57,43 @@ const getOnePost = (req, res) => __awaiter(this, void 0, void 0, function* () {
         res.status(400).send({ message: e.message });
     }
 });
+// delete post by id controller function
+const deletePost = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const user = req.user;
+        const id = req.body.id;
+        const post = yield blogs_1.Posts.findById({ "_id": id });
+        // cheking if post to be deleted is user's own post (i.e. loggeg in)
+        if (user.name === post.createdBy) {
+            // for deleting post
+            const deletedPost = yield blogs_1.Posts.findByIdAndDelete({ "_id": id });
+            // getting image name
+            const imgLink = post.picture;
+            const port = process.env.PORT || 3000;
+            const removedStr = `http://localhost:${port}/uploads/blog-post/`;
+            // getting image name from image link
+            const imgName = imgLink.replace(removedStr, "");
+            // getting path to picture
+            const imgPath = path.join('./../../public/uploads/blog-post', imgName);
+            console.log(imgPath);
+            fs.unlink(imgPath, (error) => {
+                if (error) {
+                    console.log('error in deleting image');
+                }
+            });
+        }
+        else {
+            throw new Error("You don't have access to delete this post");
+        }
+        res.send({ message: "post deleted" });
+    }
+    catch (e) {
+        res.status(400).send({ message: e.message });
+    }
+});
 module.exports = {
     createPost,
     getPosts,
-    getOnePost
+    getOnePost,
+    deletePost
 };

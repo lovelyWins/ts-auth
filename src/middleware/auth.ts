@@ -16,23 +16,14 @@ const auth = async (
     const user: any = await Users.findOne({ _id: decoded._id }).select({
       password: 0,
     });
-<<<<<<< HEAD
     if (!user) {
       throw new Error("Unauthenticated");
     }
-=======
-    //Verify if user found before storing it in request
->>>>>>> 01f4601565818f0e1d39c0c9f2acf68e3f324129
     req.user = user;
     next();
   } catch (e) {
     res.status(401).send({ error: "Unauthenticated" });
   }
-<<<<<<< HEAD
-=======
-//Remove following next
-  next();
->>>>>>> 01f4601565818f0e1d39c0c9f2acf68e3f324129
 };
 
 module.exports = auth;

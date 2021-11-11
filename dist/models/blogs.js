@@ -28,5 +28,9 @@ const postSchema = new mongoose_1.default.Schema({
     timeOfUpdation: {
         type: String,
     },
+    createdBy: {
+        type: String,
+        required: true
+    }
 });
 exports.Posts = mongoose_1.default.model("Posts", postSchema);

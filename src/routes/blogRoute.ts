@@ -32,7 +32,10 @@ postRouter.post(
 postRouter.get("/posts", blogController.getPosts);
 
 // get one post by id
-postRouter.get("/post",blogController.getOnePost);
+postRouter.get("/post", blogController.getOnePost);
+
+//delete post by id
+postRouter.delete("/deletePost", auth, blogController.deletePost);
 
 // update post by id
 postRouter.post(
@@ -42,12 +45,5 @@ postRouter.post(
   }
 );
 
-//delete post by id
-postRouter.delete(
-  "/deletePost",
-  async (req: express.Request, res: express.Response) => {
-    res.send("post deleted");
-  }
-);
 
 module.exports = postRouter;

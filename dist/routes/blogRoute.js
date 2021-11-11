@@ -39,12 +39,10 @@ postRouter.post("/createPost", auth, upload.single("upload"), blogController.cre
 postRouter.get("/posts", blogController.getPosts);
 // get one post by id
 postRouter.get("/post", blogController.getOnePost);
+//delete post by id
+postRouter.delete("/deletePost", auth, blogController.deletePost);
 // update post by id
 postRouter.post("/updatePost", (req, res) => __awaiter(this, void 0, void 0, function* () {
     res.send("post updated");
-}));
-//delete post by id
-postRouter.delete("/deletePost", (req, res) => __awaiter(this, void 0, void 0, function* () {
-    res.send("post deleted");
 }));
 module.exports = postRouter;

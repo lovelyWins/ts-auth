@@ -2,6 +2,8 @@ import express from "express";
 import { Posts } from "../models/blogs";
 const auth = require("../middleware/auth");
 const path = require('path')
+const fs = require('fs')
+
 
 // create post controller function
 const createPost = async (req: express.Request, res: express.Response) => {
@@ -61,8 +63,59 @@ const getOnePost = async (req: express.Request, res: express.Response) => {
 
 }
 
+
+// delete post by id controller function
+const deletePost = async (req: express.Request, res: express.Response) => {
+
+  try {
+    const user: any = req.user
+    const id = req.body.id
+    const post: any = await Posts.findById({ "_id": id })
+
+    // cheking if post to be deleted is user's own post (i.e. loggeg in)
+    if (user.name === post.createdBy) {
+
+      // for deleting post
+      const deletedPost = await Posts.findByIdAndDelete({ "_id": id })
+
+      // getting image name
+      const imgLink = post.picture
+      const port = process.env.PORT || 3000;
+      const removedStr = `http://localhost:${port}/uploads/blog-post/`
+
+      // getting image name from image link
+      const imgName = imgLink.replace(removedStr, "")
+
+      // getting path to picture
+      const imgPath = path.join('./../../public/uploads/blog-post', imgName)
+      console.log(imgPath)
+      fs.unlink(imgPath, (error: any) => {
+        if (error) {
+          console.log('error in deleting image')
+        }
+      })
+
+    } else {
+      throw new Error("You don't have access to delete this post")
+    }
+
+    res.send({ message: "post deleted" })
+  } catch (e: any) {
+    res.status(400).send({ message: e.message })
+  }
+
+}
+
+
+
+
+
+
+
+
 module.exports = {
   createPost,
   getPosts,
-  getOnePost
+  getOnePost,
+  deletePost
 };
