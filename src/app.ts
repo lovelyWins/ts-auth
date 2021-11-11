@@ -9,7 +9,10 @@ app.use(express.static('public'))
 
 
 
-// listening to port
-app.listen(3000, () => {
+// if there is preconfigured port then it'll run, or 3000 wil run
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
   console.log("app is running on 3000");
 });
+

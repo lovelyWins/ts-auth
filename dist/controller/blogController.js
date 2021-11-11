@@ -21,7 +21,8 @@ const createPost = (req, res) => __awaiter(this, void 0, void 0, function* () {
         // creating url for image
         let imgPath = imgInstance.path;
         let imgName = imgPath.replace("public\\uploads\\blog-post\\", "");
-        let imgUrl = `http://localhost:3000/uploads/blog-post/${imgName}`;
+        const port = process.env.PORT || 3000;
+        let imgUrl = `http://localhost:${port}/uploads/blog-post/${imgName}`;
         // adding date
         userInstance.timeOfCreation = new Date();
         userInstance.createdBy = userData.name;
@@ -33,6 +34,9 @@ const createPost = (req, res) => __awaiter(this, void 0, void 0, function* () {
     catch (e) {
         res.status(400).send({ message: e.message });
     }
+});
+// creating controller function for get users
+const getPosts = (req, res) => __awaiter(this, void 0, void 0, function* () {
 });
 module.exports = {
     createPost,

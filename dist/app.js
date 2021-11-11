@@ -11,7 +11,8 @@ app.use(express_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.json());
 app.use(mainRouter);
 app.use(express_1.default.static('public'));
-// listening to port
-app.listen(3000, () => {
+// if there is preconfigured port then it'll run, or 3000 wil run
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
     console.log("app is running on 3000");
 });
