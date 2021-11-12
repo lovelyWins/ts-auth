@@ -1,6 +1,5 @@
 import express from "express";
 import { Posts } from "../models/blogs";
-const auth = require("../middleware/auth");
 const path = require('path')
 const fs = require('fs')
 
@@ -34,7 +33,6 @@ const createPost = async (req: express.Request, res: express.Response) => {
     res.status(400).send({ message: e.message });
   }
 };
-
 
 // creating controller function for get users
 const getPosts = async (req: express.Request, res: express.Response) => {
@@ -86,11 +84,12 @@ const deletePost = async (req: express.Request, res: express.Response) => {
       const imgName = imgLink.replace(removedStr, "")
 
       // getting path to picture
-      const imgPath = path.join('./../../public/uploads/blog-post', imgName)
+      const imgPath = path.join(__dirname, '../../public/uploads/blog-post', imgName)
 
       fs.unlink(imgPath, (error: any) => {
         if (error) {
-          console.log('error in deleting image')
+          console.log(error)
+          throw error
         }
       })
 
@@ -143,7 +142,7 @@ const updatePost = async (req: express.Request, res: express.Response) => {
       const imgName = imgLink.replace(removedStr, "")
 
       // getting path to picture
-      const imgPath = path.join('./../../public/uploads/blog-post', imgName)
+      const imgPath = path.join(__dirname, '../../public/uploads/blog-post', imgName)
       fs.unlink(imgPath, (error: any) => {
         if (error) {
           console.log('error in deleting image')

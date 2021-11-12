@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const blogs_1 = require("../models/blogs");
-const auth = require("../middleware/auth");
 const path = require('path');
 const fs = require('fs');
 // create post controller function
@@ -74,10 +73,11 @@ const deletePost = (req, res) => __awaiter(this, void 0, void 0, function* () {
             // getting image name from image link
             const imgName = imgLink.replace(removedStr, "");
             // getting path to picture
-            const imgPath = path.join('./../../public/uploads/blog-post', imgName);
+            const imgPath = path.join(__dirname, '../../public/uploads/blog-post', imgName);
             fs.unlink(imgPath, (error) => {
                 if (error) {
-                    console.log('error in deleting image');
+                    console.log(error);
+                    throw error;
                 }
             });
         }
@@ -119,7 +119,7 @@ const updatePost = (req, res) => __awaiter(this, void 0, void 0, function* () {
             // getting image name from image link
             const imgName = imgLink.replace(removedStr, "");
             // getting path to picture
-            const imgPath = path.join('./../../public/uploads/blog-post', imgName);
+            const imgPath = path.join(__dirname, '../../public/uploads/blog-post', imgName);
             fs.unlink(imgPath, (error) => {
                 if (error) {
                     console.log('error in deleting image');
