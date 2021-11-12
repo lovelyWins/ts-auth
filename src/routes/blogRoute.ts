@@ -34,16 +34,14 @@ postRouter.get("/posts", blogController.getPosts);
 // get one post by id
 postRouter.get("/post", blogController.getOnePost);
 
+// getting all posts of one user (by id)
+postRouter.get("/userPosts", auth, blogController.getUserPosts)
+
 //delete post by id
 postRouter.delete("/deletePost", auth, blogController.deletePost);
 
 // update post by id
-postRouter.post(
-  "/updatePost",
-  async (req: express.Request, res: express.Response) => {
-    res.send("post updated");
-  }
-);
+postRouter.post("/updatePost", auth, upload.single("upload"), blogController.updatePost);
 
 
 module.exports = postRouter;

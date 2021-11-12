@@ -1,12 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -39,10 +31,10 @@ postRouter.post("/createPost", auth, upload.single("upload"), blogController.cre
 postRouter.get("/posts", blogController.getPosts);
 // get one post by id
 postRouter.get("/post", blogController.getOnePost);
+// getting all posts of one user (by id)
+postRouter.get("/userPosts", auth, blogController.getUserPosts);
 //delete post by id
 postRouter.delete("/deletePost", auth, blogController.deletePost);
 // update post by id
-postRouter.post("/updatePost", (req, res) => __awaiter(this, void 0, void 0, function* () {
-    res.send("post updated");
-}));
+postRouter.post("/updatePost", auth, upload.single("upload"), blogController.updatePost);
 module.exports = postRouter;

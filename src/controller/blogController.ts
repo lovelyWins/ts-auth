@@ -63,7 +63,6 @@ const getOnePost = async (req: express.Request, res: express.Response) => {
 
 }
 
-
 // delete post by id controller function
 const deletePost = async (req: express.Request, res: express.Response) => {
 
@@ -88,7 +87,7 @@ const deletePost = async (req: express.Request, res: express.Response) => {
 
       // getting path to picture
       const imgPath = path.join('./../../public/uploads/blog-post', imgName)
-      console.log(imgPath)
+
       fs.unlink(imgPath, (error: any) => {
         if (error) {
           console.log('error in deleting image')
@@ -106,16 +105,85 @@ const deletePost = async (req: express.Request, res: express.Response) => {
 
 }
 
+// update post by id
+const updatePost = async (req: express.Request, res: express.Response) => {
+
+  try {
+    const user: any = req.user
+    const id = req.body.id
+    const post: any = await Posts.findById({ "_id": id })
+
+    if (user.name === post.createdBy) {
+
+      // updating picture attribute in for Post model in db
+      const port = process.env.PORT || 3000;
+      const imgInstance: any = req.file
+      let imagePath = imgInstance.path
+      let imageName = imagePath.replace("public\\uploads\\blog-post\\", "")
+
+      let imageUrl = `http://localhost:${port}/uploads/blog-post/${imageName}`
+      const timeNow: any = new Date()
+
+      // for updating title, description, content
+      const updatedPost: any = await Posts.findByIdAndUpdate({ "_id": id }, {
+        title: req.body.title,
+        description: req.body.description,
+        content: req.body.content,
+        picture: imageUrl,
+        timeOfUpdation: timeNow
+      })
 
 
+      // FOR IMAGE DELETION
+      // getting image name
+      const imgLink = post.picture
+      const removedStr = `http://localhost:${port}/uploads/blog-post/`
 
+      // getting image name from image link
+      const imgName = imgLink.replace(removedStr, "")
 
+      // getting path to picture
+      const imgPath = path.join('./../../public/uploads/blog-post', imgName)
+      fs.unlink(imgPath, (error: any) => {
+        if (error) {
+          console.log('error in deleting image')
+        }
+      })
 
+      //  saving updated post and sending response message
+      updatedPost.save()
+      res.send({ message: "User updated" })
+    }
+    else {
+      throw new Error("You don't have access to delete this post")
+    }
+  }
+
+  catch (e: any) {
+    res.status(400).send({ message: e.message })
+  }
+
+}
+
+// getUserPost controller function
+const getUserPosts = async (req: express.Request, res: express.Response) => {
+
+  try {
+    const user: any = req.user
+    const userPosts = await Posts.find({ createdBy: user.name })
+    res.json(userPosts)
+  } catch (e: any) {
+    res.status(400).send({ message: e.message })
+  }
+
+}
 
 
 module.exports = {
   createPost,
   getPosts,
   getOnePost,
-  deletePost
+  deletePost,
+  updatePost,
+  getUserPosts
 };
