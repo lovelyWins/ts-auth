@@ -51,7 +51,7 @@ const getPosts = async (req: express.Request, res: express.Response) => {
 const getOnePost = async (req: express.Request, res: express.Response) => {
 
   try {
-    const id = req.body.id
+    const id = req.params.id
     const post = await Posts.findById({ "_id": id })
     res.send(post)
   }
@@ -66,7 +66,7 @@ const deletePost = async (req: express.Request, res: express.Response) => {
 
   try {
     const user: any = req.user
-    const id = req.body.id
+    const id = req.params.id
     const post: any = await Posts.findById({ "_id": id })
 
     // cheking if post to be deleted is user's own post (i.e. loggeg in)

@@ -48,7 +48,7 @@ const getPosts = (req, res) => __awaiter(this, void 0, void 0, function* () {
 // creating controller function for get one post by id
 const getOnePost = (req, res) => __awaiter(this, void 0, void 0, function* () {
     try {
-        const id = req.body.id;
+        const id = req.params.id;
         const post = yield blogs_1.Posts.findById({ "_id": id });
         res.send(post);
     }
@@ -60,7 +60,7 @@ const getOnePost = (req, res) => __awaiter(this, void 0, void 0, function* () {
 const deletePost = (req, res) => __awaiter(this, void 0, void 0, function* () {
     try {
         const user = req.user;
-        const id = req.body.id;
+        const id = req.params.id;
         const post = yield blogs_1.Posts.findById({ "_id": id });
         // cheking if post to be deleted is user's own post (i.e. loggeg in)
         if (user.name === post.createdBy) {

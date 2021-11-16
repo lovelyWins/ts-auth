@@ -30,11 +30,11 @@ postRouter.post("/createPost", auth, upload.single("upload"), blogController.cre
 // get all posts
 postRouter.get("/posts", blogController.getPosts);
 // get one post by id
-postRouter.get("/post", blogController.getOnePost);
+postRouter.get("/post/:id", blogController.getOnePost);
 // getting all posts of one user (by id)
 postRouter.get("/userPosts", auth, blogController.getUserPosts);
 //delete post by id
-postRouter.delete("/deletePost", auth, blogController.deletePost);
+postRouter.delete("/deletePost/:id", auth, blogController.deletePost);
 // update post by id
 postRouter.post("/updatePost", auth, upload.single("upload"), blogController.updatePost);
 module.exports = postRouter;
